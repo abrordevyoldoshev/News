@@ -1,5 +1,7 @@
+from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
 from .models import News, Category
+from .forms import ContactForms
 
 
 # Create your views here.
@@ -36,8 +38,12 @@ def homePageView(request):
 
 
 def contactPageView(request):
+    form = ContactForms(request.POST or None)
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        return HttpResponse("<h3>Biz bilan aloqaga chiqganinggiz uchun rahmat!")
     context = {
-
+        "form": form
     }
 
     return render(request, 'news/contact.html', context=context)
