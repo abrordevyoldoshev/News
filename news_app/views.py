@@ -1,5 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
+from django.views.generic import TemplateView
+
 from .models import News, Category
 from .forms import ContactForms
 
@@ -37,13 +39,34 @@ def homePageView(request):
     return render(request, 'news/home.html', context=context)
 
 
-def contactPageView(request):
-    form = ContactForms(request.POST or None)
-    if request.method == "POST" and form.is_valid():
-        form.save()
-        return HttpResponse("<h3>Biz bilan aloqaga chiqganinggiz uchun rahmat!")
-    context = {
-        "form": form
-    }
+class ContactPageView(TemplateView):
+    template_name = 'news/contact.html'
 
-    return render(request, 'news/contact.html', context=context)
+    def get(self, request, *args, **kwargs):
+        form = ContactForms
+        context = {
+            'form': form
+        }
+        return render(request, 'news/contact.html', context=context)
+
+    def post(self, request, *args, **kwargs):
+        form = ContactForms(request.POST)
+        if request.method == 'POST' and form.is_valid():
+            form.save()
+            return HttpResponse("<h3>Biz bilan aloqaga chiqganinggiz uchun rahmat!")
+
+        context = {
+            'form': form
+        }
+        return render(request, 'news/contact.html', context=context)
+
+# def contactPageView(request):
+#     form = ContactForms(request.POST or None)
+#     if request.method == "POST" and form.is_valid():
+#         form.save()
+#         return HttpResponse("<h3>Biz bilan aloqaga chiqganinggiz uchun rahmat!")
+#     context = {
+#         "form": form
+#     }
+#
+#     return render(request, 'news/contact.html', context=context)
