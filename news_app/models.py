@@ -1,13 +1,18 @@
 from django.db import models
+from django.urls import reverse
 from django.utils import timezone
 
 
 # Create your models here.
 
 
+def upload_to(filename):
+    return 'images/{filename}'.format(filename=filename)
+
+
 class PublishedManger(models.Manager):
     def get_queryset(self):
-        return super.get_queryset().filter(status=News.Status.Published)
+        return super().get_queryset().filter(status=News.Status.Published)
 
 
 class Category(models.Model):
@@ -41,8 +46,10 @@ class News(models.Model):
     def __str__(self):
         return self.title
 
+    def get_absolute_url(self):
+        return reverse("news_detail", args=[self.slug])
 
-class Contact (models.Model):
+class Contact(models.Model):
     name = models.CharField(max_length=150)
     email = models.EmailField(max_length=150)
     message = models.TextField()

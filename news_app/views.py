@@ -1,6 +1,6 @@
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, ListView
 
 from .models import News, Category
 from .forms import ContactForms
@@ -18,8 +18,8 @@ def news_list(request):
     return render(request, 'news/news_list.html', context=context)
 
 
-def news_detail(request, id):
-    news = get_object_or_404(News, id=id, status=News.Status.Published)
+def news_detail(request, news):
+    news = get_object_or_404(News, slug=news, status=News.Status.Published)
 
     context = {
         "news": news
@@ -28,15 +28,29 @@ def news_detail(request, id):
 
 
 def homePageView(request):
-    news = News.objects.all().filter(status=News.Status.Published)
+    news_list = News.objects.all().filter(status=News.Status.Published).order_by("-publish_time")[:10]
+    local_news = News.published.all().filter(category__name='Mahalliy')[:4]
     category = Category.objects.all()
 
     context = {
-        "news": news,
+        "news_list": news_list,
         "category": category,
+        'local_news': local_news
     }
 
     return render(request, 'news/home.html', context=context)
+
+
+# class HomePageView(ListView):
+#     model = News
+#     template_name = 'news/home.html'
+#     context_object_name = 'news'
+#
+#     def get_context_data(self,**kwargs):
+#         context = super().get_context_data(**kwargs)
+#         context['categories'] = self.model.objects.all()
+#         context['news_list'] = News.objects.all().filter(status=News.Status.Published).order_by("-publish_time")[:10]
+#         context['local_news'] = News.published.all().filter(category__name='Mahalliy')[:4]
 
 
 class ContactPageView(TemplateView):
