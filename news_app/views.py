@@ -1,6 +1,6 @@
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
-from django.views.generic import TemplateView, ListView
+from django.views.generic import TemplateView, ListView, UpdateView, CreateView, DetailView
 
 from .models import News, Category
 from .forms import ContactForms
@@ -74,13 +74,60 @@ class ContactPageView(TemplateView):
         }
         return render(request, 'news/contact.html', context=context)
 
-# def contactPageView(request):
-#     form = ContactForms(request.POST or None)
-#     if request.method == "POST" and form.is_valid():
-#         form.save()
-#         return HttpResponse("<h3>Biz bilan aloqaga chiqganinggiz uchun rahmat!")
-#     context = {
-#         "form": form
-#     }
-#
-#     return render(request, 'news/contact.html', context=context)
+
+def contactPageView(request):
+    form = ContactForms(request.POST or None)
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        return HttpResponse("<h3>Biz bilan aloqaga chiqganinggiz uchun rahmat!")
+    context = {
+        "form": form
+    }
+
+    return render(request, 'news/contact.html', context=context)
+
+
+class LocalNewsView(ListView):
+    model = News
+    template_name = 'news/local.html'
+    context_object_name = 'local_news'
+
+    def get_queryset(self):
+        news = self.model.published.all().filter(category__name='Mahalliy')
+        return news
+
+
+class ForeignNewsView(ListView):
+    model = News
+    template_name = 'news/foreign.html'
+    context_object_name = 'Foreign_news'
+
+    def get_queryset(self):
+        news = self.model.published.all().filter(category__name='Horij')
+        return news
+
+
+class SportNewsView(ListView):
+    model = News
+    template_name = 'news/sport.html'
+    context_object_name = 'sport_news'
+
+    def get_queryset(self):
+        news = self.model.published.all().filter(category__name='Sport')
+        return news
+
+
+class TechnologyNewsView(ListView):
+    model = News
+    template_name = 'news/technology.html'
+    context_object_name = 'technology_news'
+
+    def get_queryset(self):
+        news = self.model.published.all().filter(category__name='Tehnalogiya')
+        return news
+
+
+class NewsUpdateView(UpdateView):
+    model = News
+    fields = ('title', 'body', 'image', 'category', 'status')
+    template_name = 'crud/news_edit.html'
