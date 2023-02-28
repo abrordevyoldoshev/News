@@ -1,0 +1,13 @@
+{% extends 'news/base.html' %}
+{% block title %} Login Page {% endblock title %}
+
+{% block content %}
+    <h2>Veb saytga krish login </h2>
+    <p>Iltimos sayitga krish uchun quydagi formani to'ldirish</p>
+<form action="" method="post">
+     {% csrf_token %}
+     {{ form.as_p }}
+    <button type="submit">Login</button>
+</form>
+{% endblock content %}
+

@@ -1,0 +1,14 @@
+{% extends 'news/base.html' %}
+{% load static %}
+
+{% block title %} Delete Page {% endblock title %}
+
+{% block content %}
+  <h3>Yangilikni qo'shish</h3>
+
+  <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit" class="btn btn-success">Yangilik qoshish</button>
+  </form>
+{% endblock content %}

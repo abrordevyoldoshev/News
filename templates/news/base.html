@@ -35,7 +35,14 @@
             </ul>
           </div>
           <div class="header_top_right">
+            {% if request.user.is_authenticated %}
+            <p><a  class="profile_base" href="{% url 'profile_page' %}">My profile</a></p>
+            {% else %}
+            <p><a class="profile_base" href="{% url 'login_page' %}">Login</a></p>
+            {% endif %}
             <p>{% now "jS F Y H:i" %}</p>
+
+
           </div>
         </div>
       </div>

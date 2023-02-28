@@ -1,0 +1,13 @@
+{% extends 'news/base.html' %}
+{% load static %}
+
+{% block title %} Delete Page {% endblock title %}
+
+{% block content %}
+ <h3 class="text-center">Jory yangilikni o'chirish</h3>
+ <form method="post">
+  {% csrf_token %}
+  <h3>{{ news.title | truncatewords:4}}... sarlavhali yangilikni o'chirmoqchimisiz </h3>
+   <button type="submit" class="btn btn-danger ml-2">Delete</button>
+ </form>
+{% endblock content %}

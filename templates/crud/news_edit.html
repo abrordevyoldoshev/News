@@ -1,0 +1,14 @@
+{% extends 'news/base.html' %}
+
+{% block title %} Edite Page {% endblock title %}
+
+{% block content %}
+
+ <h3 class="text-center">Jory yangilikni o'chirish</h3>
+ <form method="post" enctype="multipart/form-data">
+     {% csrf_token%}
+     {{ form.as_p }}
+   <button type="submit" class="btn btn-info ml-2">Tahrirlash</button>
+ </form>
+
+{% endblock content %}
